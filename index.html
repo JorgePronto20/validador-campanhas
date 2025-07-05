@@ -6,14 +6,16 @@
   https://unpkg.com/html5-qrcode
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-    #reader { width: 300px; margin: auto; }
+    #reader { width: 300px; margin: auto; display: none; }
     #result { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
+    button { padding: 10px 20px; font-size: 1em; margin-top: 20px; }
   </style>
 </head>
 <body>
   <h1>Validador de QR Code</h1>
   <p>Campanha: Batata frita grátis no menu duplo 🍟</p>
 
+  <button onclick="iniciarLeitura()">📷 Ligar Câmara</button>
   <div id="reader"></div>
   <div id="result">Aguardando leitura...</div>
 
@@ -39,24 +41,29 @@
       }
     }
 
-    const html5QrCode = new Html5Qrcode("reader");
-    const config = { fps: 10, qrbox: 250 };
+    let html5QrCode;
 
-    Html5Qrcode.getCameras().then(devices => {
-      if (devices && devices.length) {
-        html5QrCode.start(
-          { facingMode: "environment" },
-          config,
-          qrCodeMessage => {
-            validarCodigo(qrCodeMessage);
-            html5QrCode.stop();
-          },
-          errorMessage => {}
-        );
-      }
-    }).catch(err => {
-      document.getElementById('result').innerHTML = "Erro ao aceder à câmara.";
-    });
+    function iniciarLeitura() {
+      document.getElementById('reader').style.display = 'block';
+      html5QrCode = new Html5Qrcode("reader");
+      const config = { fps: 10, qrbox: 250 };
+
+      Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length) {
+          html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            qrCodeMessage => {
+              validarCodigo(qrCodeMessage);
+              html5QrCode.stop();
+            },
+            errorMessage => {}
+          );
+        }
+      }).catch(err => {
+        document.getElementById('result').innerHTML = "Erro ao aceder à câmara.";
+      });
+    }
   </script>
 </body>
 </html>
