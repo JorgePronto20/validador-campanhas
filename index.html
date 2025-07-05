@@ -113,11 +113,21 @@
       "FRITASZONE01_2020": "não usado"
     };
 
+    function sincronizarComLocalStorage() {
+      for (const codigo in codigosValidos) {
+        const dataUsado = localStorage.getItem(codigo);
+        if (dataUsado) {
+          codigosValidos[codigo] = "usado";
+        }
+      }
+    }
+
     function verificarID() {
       const input = document.getElementById("deviceInput").value.trim();
       if (input === DEVICE_ID) {
         autorizado = true;
         document.getElementById("loginOverlay").style.display = "none";
+        sincronizarComLocalStorage();
       } else {
         alert("Dispositivo não autorizado.");
       }

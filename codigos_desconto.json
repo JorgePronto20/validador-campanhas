@@ -1,8 +1,8 @@
 [
   {
     "codigo": "FRITASZONE01_202",
-    "estado": "não usado",
-    "data_utilizacao": ""
+    "estado": "usado",
+    "data_utilizacao": "2024-05-01 14:32:10"
   },
   {
     "codigo": "FRITASZONE01_203",
@@ -41,8 +41,8 @@
   },
   {
     "codigo": "FRITASZONE01_2010",
-    "estado": "não usado",
-    "data_utilizacao": ""
+    "estado": "usado",
+    "data_utilizacao": "2024-05-02 10:15:45"
   },
   {
     "codigo": "FRITASZONE01_2011",
