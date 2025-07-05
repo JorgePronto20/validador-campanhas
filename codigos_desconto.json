@@ -1,7 +1,8 @@
 [
   {
     "codigo": "FRITASZONE01_202",
-    "estado": "não usado"
+    "estado": "usado",
+    "data_utilizacao": "2025-07-05 15:20:43"
   },
   {
     "codigo": "FRITASZONE01_203",
