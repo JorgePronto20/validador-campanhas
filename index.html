@@ -4,48 +4,51 @@
   <meta charset="UTF-8">
   <title>Campanha The Smash Zone</title>
   <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #000;
-      color: #fff;
+      color: #FFD600;
       text-align: center;
       padding: 40px;
+      margin: 0;
     }
     h1 {
-      color: #fbbc04;
       font-size: 2em;
+      margin-bottom: 10px;
     }
     p {
       font-size: 1.2em;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      color: #FFFFFF;
     }
     #reader {
-      width: 90%;
-      max-width: 400px;
+      width: 100%;
+      max-width: 360px;
       margin: auto;
       display: none;
-      border: 2px solid #fbbc04;
+      border: 2px solid #FFD600;
       border-radius: 10px;
-      padding: 10px;
-      background-color: #111;
     }
     #result {
       margin-top: 20px;
       font-size: 1.2em;
       font-weight: bold;
+      color: #FFFFFF;
     }
     button {
       padding: 15px 30px;
       font-size: 1.2em;
-      background-color: #fbbc04;
+      background-color: #FFD600;
       color: #000;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      margin-top: 20px;
     }
     button:hover {
-      background-color: #e0a800;
+      background-color: #ffeb3b;
     }
   </style>
 </head>
@@ -60,7 +63,6 @@
   <script>
     const codigosValidos = {};
 
-    // Carregar o ficheiro JSON com os códigos válidos
     fetch('codigos_desconto.json')
       .then(response => response.json())
       .then(data => {
@@ -72,7 +74,7 @@
     function validarCodigo(codigo) {
       if (codigosValidos[codigo] === "não usado") {
         document.getElementById('result').innerHTML = "✅ Código válido: " + codigo;
-        codigosValidos[codigo] = "usado"; // Marcar como usado após validação
+        codigosValidos[codigo] = "usado";
       } else if (codigosValidos[codigo]) {
         document.getElementById('result').innerHTML = "⚠️ Código já usado: " + codigo;
       } else {
