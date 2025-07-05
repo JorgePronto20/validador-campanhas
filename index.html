@@ -1,28 +1,67 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Validador de QR Code - Campanha FRITAS</title>
+  <title>Campanha The Smash Zone</title>
   <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-    #reader { width: 300px; margin: auto; display: none; }
-    #result { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
-    button { padding: 10px 20px; font-size: 1em; margin-top: 20px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #FFD600;
+      text-align: center;
+      padding: 40px;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    #reader {
+      width: 100%;
+      max-width: 360px;
+      margin: auto;
+      display: none;
+      border: 2px solid #FFD600;
+      border-radius: 10px;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #FFD600;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #ffeb3b;
+    }
   </style>
 </head>
 <body>
-  <h1>Validador de QR Code</h1>
-  <p>Campanha: Batata frita grátis no menu duplo 🍟</p>
+  <h1>Campanha The Smash Zone</h1>
+  <p>Batata frita grátis no menu duplo 🍟</p>
 
-  <button onclick="iniciarLeitura()">📷 Ligar Câmara</button>
+  <button onclick="iniciarLeitura()">📷 Validar</button>
   <div id="reader"></div>
   <div id="result">Aguardando leitura...</div>
 
   <script>
     const codigosValidos = {};
 
-    // Carregar o ficheiro JSON com os códigos válidos
     fetch('codigos_desconto.json')
       .then(response => response.json())
       .then(data => {
