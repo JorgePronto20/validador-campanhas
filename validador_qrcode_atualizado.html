@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Validador de QR Code</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    #reader { width: 300px; margin: auto; }
+    #result { margin-top: 20px; font-size: 1.2em; }
+    .success { color: green; }
+    .used { color: orange; }
+    .invalid { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Validador de QR Code</h1>
+  <div id="reader"></div>
+  <div id="result">Aguardando leitura...</div>
+
+  <script>
+    const validCodes = {
+      "FRITAS-7XK9": false,
+      "FRITAS-2LQ3": false,
+      "FRITAS-9ZP1": false
+      // Adiciona aqui os códigos válidos conforme necessário
+    };
+
+    function showMessage(message, className) {
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = message;
+      resultDiv.className = className;
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+      if (decodedText in validCodes) {
+        if (!validCodes[decodedText]) {
+          validCodes[decodedText] = true;
+          showMessage("✅ Código válido! Marcado como usado.", "success");
+        } else {
+          showMessage("⚠️ Código já foi usado.", "used");
+        }
+      } else {
+        showMessage("❌ Código inválido.", "invalid");
+      }
+    }
+
+    function onScanFailure(error) {
+      console.warn(`Erro de leitura: ${error}`);
+    }
+
+    function startScanner() {
+      const html5QrCode = new Html5Qrcode("reader");
+      Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length) {
+          const cameraId = devices[0].id;
+          html5QrCode.start(
+            cameraId,
+            {
+              fps: 10,
+              qrbox: 250
+            },
+            onScanSuccess,
+            onScanFailure
+          ).catch(err => {
+            showMessage("Erro ao iniciar a câmara: " + err, "invalid");
+          });
+        } else {
+          showMessage("Nenhuma câmara encontrada.", "invalid");
+        }
+      }).catch(err => {
+        showMessage("Erro ao aceder à câmara: " + err, "invalid");
+      });
+    }
+
+    // Inicia o scanner após o carregamento da página
+    window.addEventListener("load", startScanner);
+  </script>
+</body>
+</html>
