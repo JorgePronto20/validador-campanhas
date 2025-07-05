@@ -24,7 +24,9 @@
     fetch('codigos_desconto.json')
       .then(response => response.json())
       .then(data => {
-        Object.assign(codigosValidos, data);
+        for (const linha of data) {
+          codigosValidos[linha.codigo] = linha.estado;
+        }
       });
 
     function validarCodigo(codigo) {
@@ -58,6 +60,3 @@
   </script>
 </body>
 </html>
-
-
-  
