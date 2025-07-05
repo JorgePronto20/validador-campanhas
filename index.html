@@ -61,22 +61,28 @@
   <div id="result">Aguardando leitura...</div>
 
   <script>
-    const codigosValidos = {};
+    const DEVICE_ID = "JP";
+    let idInserido = prompt("Insira o ID do dispositivo autorizado:");
+    const autorizado = idInserido === DEVICE_ID;
 
-    fetch('codigos_desconto.json')
-      .then(response => response.json())
-      .then(data => {
-        for (const linha of data) {
-          codigosValidos[linha.codigo] = linha.estado;
-        }
-      });
+    const codigosValidos = {
+      "FRITASZONE01_202": "não usado","FRITASZONE01_203": "não usado","FRITASZONE01_204": "não usado","FRITASZONE01_205": "não usado","FRITASZONE01_206": "não usado","FRITASZONE01_207": "não usado","FRITASZONE01_208": "não usado","FRITASZONE01_209": "não usado","FRITASZONE01_2010": "não usado","FRITASZONE01_2011": "não usado","FRITASZONE01_2012": "não usado","FRITASZONE01_2013": "não usado","FRITASZONE01_2014": "não usado","FRITASZONE01_2015": "não usado","FRITASZONE01_2016": "não usado","FRITASZONE01_2017": "não usado","FRITASZONE01_2018": "não usado","FRITASZONE01_2019": "não usado","FRITASZONE01_2020": "não usado"
+    };
 
     function validarCodigo(codigo) {
+      if (!autorizado) {
+        document.getElementById('result').innerHTML = "⚠️ Dispositivo não autorizado.";
+        return;
+      }
+
       if (codigosValidos[codigo] === "não usado") {
         document.getElementById('result').innerHTML = "✅ Código válido: " + codigo;
         codigosValidos[codigo] = "usado";
+        const agora = new Date().toLocaleString("pt-PT");
+        localStorage.setItem(codigo, agora);
       } else if (codigosValidos[codigo]) {
-        document.getElementById('result').innerHTML = "⚠️ Código já usado: " + codigo;
+        const usadoEm = localStorage.getItem(codigo);
+        document.getElementById('result').innerHTML = "⚠️ Código já usado: " + codigo + " em " + usadoEm;
       } else {
         document.getElementById('result').innerHTML = "❌ Código inválido: " + codigo;
       }
@@ -85,6 +91,10 @@
     let html5QrCode;
 
     function iniciarLeitura() {
+      if (!autorizado) {
+        alert("Este dispositivo não está autorizado a validar códigos.");
+        return;
+      }
       document.getElementById('reader').style.display = 'block';
       html5QrCode = new Html5Qrcode("reader");
       const config = { fps: 10, qrbox: 250 };
