@@ -57,11 +57,15 @@
               validarCodigo(qrCodeMessage);
               html5QrCode.stop();
             },
-            errorMessage => {}
+            errorMessage => {
+              console.warn("Erro de leitura: ", errorMessage);
+            }
           );
+        } else {
+          document.getElementById('result').innerHTML = "❌ Nenhuma câmara encontrada.";
         }
       }).catch(err => {
-        document.getElementById('result').innerHTML = "Erro ao aceder à câmara.";
+        document.getElementById('result').innerHTML = "❌ Erro ao aceder à câmara: " + err;
       });
     }
   </script>
