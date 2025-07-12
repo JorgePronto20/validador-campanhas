@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -103,52 +102,50 @@
     const DEVICE_ID = "JP";
     let autorizado = false;
 
-    const codigosValidos = {
-      "FRITASZONE01_202": "não usado","FRITASZONE01_203": "não usado","FRITASZONE01_204": "não usado",
-      "FRITASZONE01_205": "não usado","FRITASZONE01_206": "não usado","FRITASZONE01_207": "não usado",
-      "FRITASZONE01_208": "não usado","FRITASZONE01_209": "não usado","FRITASZONE01_2010": "não usado",
-      "FRITASZONE01_2011": "não usado","FRITASZONE01_2012": "não usado","FRITASZONE01_2013": "não usado",
-      "FRITASZONE01_2014": "não usado","FRITASZONE01_2015": "não usado","FRITASZONE01_2016": "não usado",
-      "FRITASZONE01_2017": "não usado","FRITASZONE01_2018": "não usado","FRITASZONE01_2019": "não usado",
-      "FRITASZONE01_2020": "não usado"
-    };
-
-    function sincronizarComLocalStorage() {
-      for (const codigo in codigosValidos) {
-        const dataUsado = localStorage.getItem(codigo);
-        if (dataUsado) {
-          codigosValidos[codigo] = "usado";
-        }
-      }
-    }
-
     function verificarID() {
       const input = document.getElementById("deviceInput").value.trim();
       if (input === DEVICE_ID) {
         autorizado = true;
         document.getElementById("loginOverlay").style.display = "none";
-        sincronizarComLocalStorage();
       } else {
         alert("Dispositivo não autorizado.");
       }
     }
 
-    function validarCodigo(codigo) {
+    async function validarCodigo(codigo) {
       if (!autorizado) {
         document.getElementById('result').innerHTML = "⚠️ Dispositivo não autorizado.";
         return;
       }
 
-      if (codigosValidos[codigo] === "não usado") {
-        const agora = new Date().toLocaleString("pt-PT");
-        codigosValidos[codigo] = "usado";
-        localStorage.setItem(codigo, agora);
-        document.getElementById('result').innerHTML = "✅ Código válido: " + codigo + "<br>🕒 " + agora;
-      } else if (codigosValidos[codigo]) {
-        const usadoEm = localStorage.getItem(codigo);
-        document.getElementById('result').innerHTML = "⚠️ Código já usado: " + codigo + "<br>🕒 " + usadoEm;
-      } else {
-        document.getElementById('result').innerHTML = "❌ Código inválido: " + codigo;
+      try {
+        const response = await fetch("https://validador-backend-1.onrender.com/validar-codigo", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            codigo: codigo,
+            dispositivo: DEVICE_ID
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          const agora = new Date().toLocaleString("pt-PT");
+          document.getElementById('result').innerHTML = "✅ Código válido: " + codigo + "<br>🕒 " + agora;
+        } else {
+          if (response.status === 409) {
+            document.getElementById('result').innerHTML = "⚠️ Código já usado: " + codigo;
+          } else if (response.status === 404) {
+            document.getElementById('result').innerHTML = "❌ Código inválido: " + codigo;
+          } else {
+            document.getElementById('result').innerHTML = "❌ Erro ao validar código.";
+          }
+        }
+      } catch (error) {
+        document.getElementById('result').innerHTML = "❌ Erro de rede: " + error;
       }
     }
 
