@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Administração - Códigos Usados</title>
+  <style>
+    body { background-color: #111; color: #ff0; font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #222; color: #fff; }
+    th, td { border: 1px solid #555; padding: 8px; text-align: left; }
+    th { background-color: #333; }
+    .hidden { display: none; }
+    button { margin-top: 10px; padding: 10px; background-color: #ff0; color: #000; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h1>Painel de Administração</h1>
+  <p>Lista de códigos promocionais já utilizados:</p>
+
+  <table id="tabelaCodigos">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Data de Utilização</th>
+        <th>ID do Dispositivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Conteúdo será preenchido dinamicamente -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch('codigos_usados.json')
+      .then(response => response.json())
+      .then(data => {
+        const tabela = document.querySelector('#tabelaCodigos tbody');
+        data.forEach(item => {
+          if (item.estado === 'usado') {
+            const linha = document.createElement('tr');
+            linha.innerHTML = `
+              <td>${item.codigo}</td>
+              <td>${item.data_utilizacao}</td>
+              <td>${item.id_dispositivo || '—'}</td>
+            `;
+            tabela.appendChild(linha);
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Erro ao carregar o JSON:', error);
+      });
+  </script>
+
+</body>
+</html>

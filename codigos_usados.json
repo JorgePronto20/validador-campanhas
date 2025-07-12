@@ -1,0 +1,14 @@
+[
+  {
+    "codigo": "FRITASZONE01_202",
+    "estado": "usado",
+    "data_utilizacao": "2024-05-01 14:32:10",
+    "id_dispositivo": "DISP001"
+  },
+  {
+    "codigo": "FRITASZONE01_2010",
+    "estado": "usado",
+    "data_utilizacao": "2024-05-02 10:15:45",
+    "id_dispositivo": "DISP002"
+  }
+]
